@@ -1,7 +1,9 @@
 package idiomas;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -10,27 +12,51 @@ import java.util.Map;
 class msg {
 
     private static lang currentIdioma;
-    static String outputFilePath;
+    static String FilePath;
     static HashMap<String, String> mensajes;
 
     static File file;
 
     static void setIdioma(lang e) {
         currentIdioma = e;
-        outputFilePath = "src/txt/" + currentIdioma.name() + ".txt";
+        FilePath = "src/txt/" + currentIdioma.name() + ".txt";
         crearArchivo();
         cargaHashMap();
     }
 
     private static void cargaHashMap() {
-        mensajes = new HashMap<>();
-        /*implementar lectura de archivo txt
-            https://www.javacodeexamples.com/read-text-file-into-hashmap-in-java-example/2333
-        */  
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(file));
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                //divide la linea en :
+                String[] parts = line.split(":");
+
+                //obtiene valores de key y valor
+                String name = parts[0].trim();
+                String value = parts[1].trim();
+
+                //insertar name y value en HashMap
+                if (!name.equals("") && !value.equals("")) {
+                    mensajes.put(name, value);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
     }
 
     private static boolean crearArchivo() {//crea archivode texto si no existe
-        file = new File(outputFilePath);
+        file = new File(FilePath);
         try {
             if (!file.exists()) {
                 file.createNewFile();
@@ -84,7 +110,7 @@ class main {
         msg.agregarMensaje("saludo", "Good Morning");
         System.out.println(msg.verMensaje("saludo"));
 
-        System.out.println(msg.outputFilePath);
+        System.out.println(msg.FilePath);
         msg.guardaArchivo();
     }
 }
