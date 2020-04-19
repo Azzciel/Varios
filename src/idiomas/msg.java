@@ -24,8 +24,9 @@ class msg {
         cargaHashMap();
     }
 
-    private static void cargaHashMap() {
+    private static boolean cargaHashMap() {
         BufferedReader br = null;
+        mensajes = new HashMap<>();
         try {
             br = new BufferedReader(new FileReader(file));
             String line = null;
@@ -41,9 +42,11 @@ class msg {
                 if (!name.equals("") && !value.equals("")) {
                     mensajes.put(name, value);
                 }
+                return true;
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
+            return false;
         } finally {
             if (br != null) {
                 try {
@@ -53,6 +56,7 @@ class msg {
                 }
             }
         }
+        return false;
     }
 
     private static boolean crearArchivo() {//crea archivode texto si no existe
@@ -65,6 +69,7 @@ class msg {
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
+            return false;
         }
         return false;
     }
@@ -84,14 +89,15 @@ class msg {
             bf.flush();
             return true;
         } catch (IOException e) {
+            return false;
         } finally {
             try {
                 //always close the writer
                 bf.close();
-            } catch (Exception e) {
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
             }
         }
-        return false;
     }
 
     public static void agregarMensaje(String key, String mensaje) {
@@ -107,10 +113,9 @@ class main {
 
     public static void main(String[] args) {
         msg.setIdioma(lang.en);
-        msg.agregarMensaje("saludo", "Good Morning");
-        System.out.println(msg.verMensaje("saludo"));
+        //msg.agregarMensaje("saludo", "Good Morning");
 
-        System.out.println(msg.FilePath);
-        msg.guardaArchivo();
+        System.out.println(msg.verMensaje("saludo"));
+        //msg.guardaArchivo();
     }
 }
