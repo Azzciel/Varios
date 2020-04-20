@@ -23,6 +23,7 @@ class msg {
         crearArchivo();
         cargaHashMap();
     }
+    
 
     private static boolean cargaHashMap() {
         BufferedReader br = null;
@@ -105,6 +106,9 @@ class msg {
     }
 
     public static String verMensaje(String key) {
+        if(mensajes.get(key)==null){
+            mensajes.put(key, "");
+        }
         return mensajes.get(key);
     }
 }
