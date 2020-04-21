@@ -102,24 +102,26 @@ class msg {
     }
 
     public static void agregarMensaje(String key, String mensaje) {
-        mensajes.put(key, mensaje);
+        mensajes.put(key, mensaje.toUpperCase());
+        guardaArchivo();
     }
 
     public static String verMensaje(String key) {
         if(mensajes.get(key)==null){
-            mensajes.put(key, "");
+            agregarMensaje(key, "");
+            guardaArchivo();
         }
         return mensajes.get(key);
     }
-}
+}   
 
-class main {
-
-    public static void main(String[] args) {
-        msg.setIdioma(lang.en);
-        //msg.agregarMensaje("saludo", "Good Morning");
-
-        System.out.println(msg.verMensaje("saludo"));
-        //msg.guardaArchivo();
-    }
-}
+//class main {
+//
+//    public static void main(String[] args) {
+//        msg.setIdioma(lang.en);
+//        //msg.agregarMensaje("saludo", "Good Morning");
+//
+//        System.out.println(msg.verMensaje("saludo"));
+//        //msg.guardaArchivo();
+//    }
+//}
